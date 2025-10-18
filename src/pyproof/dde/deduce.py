@@ -8,7 +8,7 @@ def deduce(problem: Problem, extend: bool = False) -> GroupOfFacts:
     if _config.logging:
         log("deducing problem.", seperate=True, dist=2)
 
-    new_facts = set()
+    new_facts = set(problem.facts)
     last_new_fact_count = 0
 
     while True:

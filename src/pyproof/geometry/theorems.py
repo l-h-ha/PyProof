@@ -5,7 +5,7 @@ import numpy as np
 
 
 def pythagorean(problem: Problem) -> GroupOfFacts:
-    new_facts = []
+    new_facts = set()
 
     for fact in problem.facts:
         if isinstance(fact, Angle) and fact.angle == 90:
@@ -17,15 +17,15 @@ def pythagorean(problem: Problem) -> GroupOfFacts:
             # * hypot
             if not s13 and s21 and s23:
                 hypot_len = np.hypot(s21.length, s23.length)
-                new_facts.append(LineSegment((p1, p3), length=hypot_len))
+                new_facts.add(LineSegment((p1, p3), length=hypot_len))
             # * s21
             elif not s21 and s13 and s23:
                 s21_len = np.sqrt(np.square(s13.length) - np.square(s23.length))
-                new_facts.append(LineSegment((p2, p1), length=s21_len))
+                new_facts.add(LineSegment((p2, p1), length=s21_len))
             # * s23
             elif not s23 and s21 and s13:
                 s23_len = np.sqrt(np.square(s13.length) - np.square(s21.length))
-                new_facts.append(LineSegment((p2, p3), length=s23_len))
+                new_facts.add(LineSegment((p2, p3), length=s23_len))
 
     return new_facts
 

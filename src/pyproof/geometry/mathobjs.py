@@ -1,7 +1,10 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from .. import _config
 from ..utils import log
+
+from copy import deepcopy
 
 
 class MathObject(ABC):
@@ -75,16 +78,28 @@ class Angle(MathObject):
 
 
 class Problem:
-    def __init__(self, facts: list[MathObject]) -> None:
-        self.facts = facts
+    def __init__(
+        self, facts: list[MathObject] | set[MathObject], init_facts: bool = True
+    ) -> None:
+        self.facts = set(facts)
         self.cache_line_segment = {}
 
         if _config.logging:
             log("established a problem with initial facts:", seperate=True, dist=2)
+        if init_facts:
+            for fact in facts:
+                self.add_fact(fact, append=False)
+                if _config.logging:
+                    log(str(fact))
+
+    def clone(self) -> Problem:
+        p = Problem(self.facts, init_facts=False)
+        p.cache_line_segment = deepcopy(self.cache_line_segment)
+        return p
+
+    def add_facts(self, facts: list[MathObject]) -> None:
         for fact in facts:
-            self.add_fact(fact, append=False)
-            if _config.logging:
-                log(str(fact))
+            self.add_fact(fact)
 
     def add_fact(self, fact: MathObject, append: bool = True) -> None:
         if _config.logging:
@@ -94,7 +109,7 @@ class Problem:
             print(key)
             self.cache_line_segment[key] = fact
         if append:
-            self.facts.append(fact)
+            self.facts.add(fact)
 
     ###
     ###

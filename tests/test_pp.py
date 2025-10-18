@@ -1,5 +1,6 @@
 from src.pyproof.geometry.mathobjs import Problem, Angle, LineSegment, Point
 from src.pyproof.dde import deduce
+from training.scripts.generate_synthetic_data import generate_data_from_problem
 
 from src import pyproof
 
@@ -16,4 +17,6 @@ initial_facts = [
     LineSegment((pB, pC), 1),
 ]
 problem = Problem(initial_facts)
-deduce(problem)
+data = generate_data_from_problem(problem, logging=True)
+print(data)
+print(len(data))
